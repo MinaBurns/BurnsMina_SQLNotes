@@ -1,5 +1,6 @@
 package com.example.burnsc6389.mycontactapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,5 +66,35 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(title);
         builder.setMessage(message);
         builder.show();
+    }
+
+    public static final String  EXTRA_MESSAGE = "com.example.burnsc6389.mycontactapp.MESSAGE";
+
+    public void SearchRecord(View view){
+        Log.d("MyContactApp", "MainActivity: launching SearchActivity");
+        Cursor res = myDb.getAllData();
+        Intent intent = new Intent(this, SearchActivity.class);
+
+        StringBuffer buffer = new StringBuffer();
+        while(res.moveToNext()){
+            if(res.getString(1).matches(editName.getText().toString())){
+                buffer.append(res.getString(0)+ "\n" + res.getString(1)+"\n" + res.getString(2) + "\n"+ res.getString(3)+ "\n" + "\n");
+            }
+            else if (res.getString(2).matches(editNumber.getText().toString())){
+                buffer.append(res.getString(0)+ "\n" + res.getString(1)+"\n" + res.getString(2) + "\n"+ res.getString(3)+ "\n" + "\n");
+            }
+            else if (res.getString(3).matches(editAddress.getText().toString())){
+                buffer.append(res.getString(0)+ "\n" + res.getString(1)+"\n" + res.getString(2) + "\n"+ res.getString(3)+ "\n" + "\n");
+            }
+        }
+        intent.putExtra(EXTRA_MESSAGE, buffer.toString());
+        //*
+        //intent.putExtra(EXTRA_MESSAGE, editName.getText().toString());
+        //Intent intent2 = new Intent(this, SearchActivity.class);
+        //Intent intent3 = new Intent(this, SearchActivity.class);
+        //intent2.putExtra(EXTRA_MESSAGE, editNumber.getText().toString());
+        //intent3.putExtra(EXTRA_MESSAGE, editAddress.getText().toString());
+        startActivity(intent);
+
     }
 }
